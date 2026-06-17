@@ -1,7 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import Field
+from pydantic import EmailStr, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -11,6 +11,10 @@ class Settings(BaseSettings):
     app_name: str = "The Tech Project Admin Backend"
     app_env: str = "development"
     api_v1_prefix: str = "/api/v1"
+    cors_allow_origins: str = "http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173"
+    cors_allow_credentials: bool = True
+    cors_allow_methods: str = "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+    cors_allow_headers: str = "*"
 
     aws_region: str = "ap-south-1"
     aws_access_key_id: str = "local-access-key"
@@ -29,7 +33,7 @@ class Settings(BaseSettings):
     super_admin_username: str = "superadmin"
     super_admin_password: str = "Tech@1234"
     super_admin_name: str = "Super Admin"
-    super_admin_email: str = "superadmin@thetechproject.local"
+    super_admin_email: EmailStr = "superadmin@thetechproject.com"
     data_encryption_secret: str = "change-me"
 
     default_page_size: int = Field(default=10, ge=1, le=100)
@@ -38,6 +42,21 @@ class Settings(BaseSettings):
     @property
     def allowed_file_types_set(self) -> set[str]:
         return {item.strip().lower() for item in self.allowed_file_types.split(",") if item.strip()}
+
+    @property
+    def cors_allow_origins_list(self) -> list[str]:
+        return [item.strip() for item in self.cors_allow_origins.split(",") if item.strip()]
+
+    @property
+    def cors_allow_methods_list(self) -> list[str]:
+        return [item.strip().upper() for item in self.cors_allow_methods.split(",") if item.strip()]
+
+    @property
+    def cors_allow_headers_list(self) -> list[str]:
+        value = self.cors_allow_headers.strip()
+        if value == "*":
+            return ["*"]
+        return [item.strip() for item in value.split(",") if item.strip()]
 
     @property
     def local_asset_path(self) -> Path:
