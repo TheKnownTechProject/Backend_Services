@@ -8,9 +8,11 @@ from app.routers.admin.category_routes import router as category_router
 from app.routers.admin.dashboard_routes import router as dashboard_router
 from app.routers.admin.master_routes import router as master_router
 from app.routers.admin.tag_routes import router as tag_router
+from app.routers.admin.user_routes import router as user_router
 
 router = APIRouter()
 router.include_router(auth_router, prefix="/auth", tags=["Admin Auth"])
+router.include_router(user_router, prefix="/users", tags=["Admin Users"])
 router.include_router(dashboard_router, prefix="/dashboard", tags=["Admin Dashboard"])
 router.include_router(blog_router, prefix="/blogs", tags=["Admin Blogs"])
 router.include_router(asset_router, prefix="/assets", tags=["Admin Assets"])

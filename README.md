@@ -13,6 +13,7 @@ Admin backend bootstrap for The Tech Project.
 Implemented admin modules:
 
 - auth
+- users
 - categories
 - tags
 - assets
@@ -35,7 +36,7 @@ uvicorn app.main:app --reload
 
 Open `http://127.0.0.1:8000/docs`.
 
-Default seeded admin user:
+Default super admin credentials:
 
-- email: `admin@thetechproject.local`
-- password: `Admin@123`
+- username: `superadmin`
+- password: `Tech@1234`

@@ -13,6 +13,7 @@ from app.services.admin.category_service import CategoryService
 from app.services.admin.dashboard_service import DashboardService
 from app.services.admin.master_service import MasterService
 from app.services.admin.tag_service import TagService
+from app.services.admin.user_service import UserService
 
 bearer_scheme = HTTPBearer(auto_error=False)
 
@@ -23,6 +24,10 @@ def get_auth_service() -> AuthService:
 
 def get_category_service() -> CategoryService:
     return get_container().category_service
+
+
+def get_user_service() -> UserService:
+    return get_container().user_service
 
 
 def get_tag_service() -> TagService:
@@ -60,4 +65,3 @@ def get_current_admin_user(
     if credentials is None:
         return auth_service.raise_unauthorized()
     return auth_service.get_user_from_token(credentials.credentials)
-

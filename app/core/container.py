@@ -3,7 +3,6 @@ from functools import lru_cache
 
 from app.core.config import get_settings
 from app.core.constants import MASTER_STATUSES
-from app.core.security import hash_password
 from app.repositories.db.base_repository import InMemoryDataStore
 from app.repositories.db.blog_analytics_repository import BlogAnalyticsRepository
 from app.repositories.db.blog_asset_repository import BlogAssetRepository
@@ -23,11 +22,13 @@ from app.services.admin.category_service import CategoryService
 from app.services.admin.dashboard_service import DashboardService
 from app.services.admin.master_service import MasterService
 from app.services.admin.tag_service import TagService
+from app.services.admin.user_service import UserService
 
 
 @dataclass
 class Container:
     auth_service: AuthService
+    user_service: UserService
     category_service: CategoryService
     tag_service: TagService
     asset_service: AssetService
@@ -50,14 +51,19 @@ def seed_store(store: InMemoryDataStore) -> None:
         }
 
     if not store.users:
-        store.users["seed-admin"] = {
-            "userId": "seed-admin",
-            "name": settings.admin_seed_name,
-            "email": settings.admin_seed_email.lower(),
-            "passwordHash": hash_password(settings.admin_seed_password),
+        store.users["super-admin"] = {
+            "userId": "super-admin",
+            "username": settings.super_admin_username,
+            "name": settings.super_admin_name,
+            "email": settings.super_admin_email.lower(),
+            "password": settings.super_admin_password,
+            "roleId": "admin",
             "profileImageUrl": None,
             "bio": None,
             "isActive": True,
+            "isSuperAdmin": True,
+            "createdAt": "2026-06-17T00:00:00Z",
+            "modifiedAt": "2026-06-17T00:00:00Z",
             "isDeleted": False,
         }
 
@@ -78,6 +84,7 @@ def get_container() -> Container:
     asset_storage_repository = LocalAssetStorageRepository()
 
     auth_service = AuthService(user_repository)
+    user_service = UserService(user_repository)
     category_service = CategoryService(category_repository, tag_repository, blog_metadata_repository)
     tag_service = TagService(tag_repository, category_repository, blog_metadata_repository)
     asset_service = AssetService(blog_asset_repository, asset_storage_repository)
@@ -96,6 +103,7 @@ def get_container() -> Container:
 
     return Container(
         auth_service=auth_service,
+        user_service=user_service,
         category_service=category_service,
         tag_service=tag_service,
         asset_service=asset_service,

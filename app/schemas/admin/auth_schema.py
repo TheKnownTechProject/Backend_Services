@@ -2,14 +2,17 @@ from pydantic import BaseModel, EmailStr
 
 
 class LoginRequest(BaseModel):
-    email: EmailStr
+    username: str
     password: str
 
 
 class AdminUserResponse(BaseModel):
     userId: str
+    username: str
     name: str
     email: EmailStr
+    roleId: str
+    isSuperAdmin: bool
     profileImageUrl: str | None = None
     bio: str | None = None
 

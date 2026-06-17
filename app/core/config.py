@@ -26,9 +26,11 @@ class Settings(BaseSettings):
     max_file_size_mb: int = 10
     local_asset_dir: str = "storage/assets"
 
-    admin_seed_email: str = "admin@thetechproject.local"
-    admin_seed_password: str = "Admin@123"
-    admin_seed_name: str = "Platform Admin"
+    super_admin_username: str = "superadmin"
+    super_admin_password: str = "Tech@1234"
+    super_admin_name: str = "Super Admin"
+    super_admin_email: str = "superadmin@thetechproject.local"
+    data_encryption_secret: str = "change-me"
 
     default_page_size: int = Field(default=10, ge=1, le=100)
     max_page_size: int = Field(default=50, ge=1, le=100)

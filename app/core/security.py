@@ -1,6 +1,9 @@
 from datetime import datetime, timedelta, timezone
+import base64
+import hashlib
 from typing import Any
 
+from cryptography.fernet import Fernet, InvalidToken
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
@@ -33,3 +36,21 @@ def decode_access_token(token: str) -> dict[str, Any]:
         return jwt.decode(token, settings.jwt_secret_key, algorithms=[settings.jwt_algorithm])
     except JWTError as exc:
         raise UnauthorizedException("Invalid or expired access token.") from exc
+
+
+def encrypt_text(value: str) -> str:
+    return _get_fernet().encrypt(value.encode("utf-8")).decode("utf-8")
+
+
+def decrypt_text(value: str) -> str:
+    try:
+        return _get_fernet().decrypt(value.encode("utf-8")).decode("utf-8")
+    except InvalidToken as exc:
+        raise UnauthorizedException("Stored credential data is invalid.") from exc
+
+
+def _get_fernet() -> Fernet:
+    settings = get_settings()
+    secret = settings.data_encryption_secret or settings.jwt_secret_key
+    key = base64.urlsafe_b64encode(hashlib.sha256(secret.encode("utf-8")).digest())
+    return Fernet(key)

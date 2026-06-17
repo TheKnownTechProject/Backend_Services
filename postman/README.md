@@ -18,8 +18,8 @@ This folder contains importable Postman files for the current admin backend.
 ## Default local values
 
 - `baseUrl`: `http://127.0.0.1:8000`
-- `email`: `admin@thetechproject.local`
-- `password`: `Admin@123`
+- `username`: `superadmin`
+- `password`: `Tech@1234`
 
 ## API List
 
@@ -31,6 +31,14 @@ This folder contains importable Postman files for the current admin backend.
 
 - `POST /api/v1/admin/auth/login`
 - `GET /api/v1/admin/auth/login-user-details`
+
+### Users
+
+- `GET /api/v1/admin/users`
+- `POST /api/v1/admin/users`
+- `GET /api/v1/admin/users/{userId}`
+- `PUT /api/v1/admin/users/{userId}`
+- `DELETE /api/v1/admin/users/{userId}`
 
 ### Dashboard
 
@@ -84,9 +92,10 @@ This folder contains importable Postman files for the current admin backend.
 
 1. `Auth > Login`
 2. `Master > List Blog Statuses`
-3. `Categories > Create Category`
-4. `Tags > Create Tag`
-5. `Blogs > Create Blog`
-6. `Dashboard` and `Analytics` requests
+3. `Users > Create User`
+4. `Categories > Create Category`
+5. `Tags > Create Tag`
+6. `Blogs > Create Blog`
+7. `Dashboard` and `Analytics` requests
 
-The collection automatically stores `accessToken`, `categoryId`, `tagId`, `blogId`, and `assetId` from create responses when available.
+The collection automatically stores `accessToken`, `userId`, `categoryId`, `tagId`, `blogId`, and `assetId` from create responses when available.

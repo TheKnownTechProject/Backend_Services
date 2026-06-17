@@ -15,7 +15,7 @@ def login(
     payload: LoginRequest,
     auth_service: Annotated[AuthService, Depends(get_auth_service)],
 ):
-    return auth_controller.login(auth_service.login(payload.email, payload.password))
+    return auth_controller.login(auth_service.login(payload.username, payload.password))
 
 
 @router.get("/login-user-details")
